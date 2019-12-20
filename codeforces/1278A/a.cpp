@@ -1,6 +1,6 @@
 // https://codeforces.com/contest/1278/problem/A
-// https://codeforces.com/contest/1278/submission/67288063
-// https://github.com/miloszlakomy/competitive/codeforces/1278A
+// https://codeforces.com/contest/1278/submission/67289143
+// https://github.com/miloszlakomy/competitive/tree/master/codeforces/1278A
 // https://ideone.com/3D0Ahi
 
 #include <iostream>
