@@ -4,5 +4,7 @@ The solution in `a.cpp` has amortized time complexity
 The solution in `b.py` has amortized time complexity
 *O(t len(h))*.
 
-There is also a solution with better (not amortized) time complexity
+The solution in `c.go` has better (not amortized) time complexity
 *O(t len(h))*.
+It also runs each test case in a separate goroutine,
+distributing the work across CPU cores.
