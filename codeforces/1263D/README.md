@@ -14,12 +14,15 @@ Hash tables (Python: *set*, *frozenset*, C++: *unordered_set*) are used to uniq
 the input data, which is done for each input string *s*:
  - in *O(26) = O(1)* amortized average time,
  - in *O(len(s))* worst-case time,
+ 
 for all input strings individually:
  - in *O(n)* amortized average time,
  - in *O(n max(len(s)))* worst-case time,
+ 
 then for all processed input strings (with letters uniqed):
  - in *O(26 n) = O(n)* amortized average time,
  - in *O(26 n^2) = O(n^2)* worst-case time,
+ 
 where the size of the alphabet, 26, determines the cost of generating the hash
 values.
 
@@ -29,12 +32,15 @@ https://en.wikipedia.org/wiki/Ackermann_function ):
 *.makeset*:
  - *O(1)* amortized average,
  - *O(n)* worst-case,
+ 
 *.find*:
  - *O(α(n))* amortized average,
  - *O(n α(n))* worst-case,
+ 
 *.union*:
  - *O(α(n))* amortized average,
  - *O(n α(n))* worst-case,
+ 
 *.getcount*:
  - *O(1)* thanks to a *._count* field held and updated additionally in the other
  methods.
