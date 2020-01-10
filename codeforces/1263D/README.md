@@ -3,7 +3,7 @@ is accepted by the Codeforces checker, while `a.py` gets a time limit exceeded
 on the seventieth test.
 
 The solution is based on the union-find data structure (See:
-https://en.wikipedia.org/wiki/Disjoint-set_data_structure ), with near
+https://en.wikipedia.org/wiki/Disjoint-set_data_structure), with near
 constant-time operations, both on average and in the worst case. Note that in
 these implementations, the time complexity is amortized, which comes with the
 use of a hash table in the data structure definition. This can be worked around
@@ -21,14 +21,15 @@ for all input strings individually:
  
 then for all processed input strings (with letters uniqed):
  - in *O(26 n) = O(n)* amortized average time,
- - in *O(26 n^2) = O(n^2)* worst-case time,
+ - in *O(26 n²) = O(n²)* worst-case time,
  
 where the size of the alphabet, 26, determines the cost of generating the hash
 values.
 
 *FindUnion* methods have the following time complexities (*α* is the inverse
 of the rapidly growing Ackermann function, see:
-https://en.wikipedia.org/wiki/Ackermann_function ):
+https://en.wikipedia.org/wiki/Ackermann_function):
+
 *.makeset*:
  - *O(1)* amortized average,
  - *O(n)* worst-case,
@@ -46,14 +47,14 @@ https://en.wikipedia.org/wiki/Ackermann_function ):
  methods.
 
 *solve* has time complexity
-*O(26 L) O(FindUnion.makeset) + O(26^2) O(FindUnion.union)
+*O(26 L) O(FindUnion.makeset) + O(26²) O(FindUnion.union)
 = O(L) O(FindUnion.makeset) + O(FindUnion.union)*, which is:
  - *O(L + α(n))* amortized average,
  - *O(n (L + α(n)))* worst-case.
 
 All in all, the complexity of the solution is:
  - *O(n) + O(n) + O(L + α(n)) = O(L + α(n))* amortized average,
- - *O(n max(len(s))) + O(n^2) + O(n (L + α(n))) = O(n (L + α(n)))* worst-case.
+ - *O(n max(len(s))) + O(n²) + O(n (L + α(n))) = O(n (L + α(n)))* worst-case.
 
 Note that in practice, the worst-case complexity of hash table operations
 is seen very rarely. Also, *α* grows extraordinarily slowly. We can estimate
