@@ -9,3 +9,4 @@ puzzle_input[:,1].sort()
 print(
     sum(abs(a - b) for a, b in puzzle_input)
 )
+
