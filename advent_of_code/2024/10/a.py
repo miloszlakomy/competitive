@@ -18,8 +18,50 @@ EdgeVectors = list[tuple[Vector2D, Vector2D]]
 DIRECTION_TO_ARROW_CHAR = {(0, +1): "→", (-1, 0): "↑", (0, -1): "←", (+1, 0): "↓"}
 
 
-def all_coordinates(area_map: CharArray) -> Generator[Vector2D]:
-    return (np.array(tuple_coords) for tuple_coords in np.ndindex(area_map.shape))
+# Debug functions:
+
+
+def print_all_uphill_trails(
+    area_map: CharArray,
+    edges: EdgeVectors,
+    zeros_coords: list[Vector2D],
+    nines_coords: list[Vector2D],
+    directed_graph: algutils.directed_graph.DirectedGraph,
+) -> None:
+    for zero_coords in zeros_coords:
+        for nine_coords in nines_coords:
+            uphill_trails = directed_graph.find_paths(zero_coords, nine_coords)
+
+            print()
+            print()
+            cprint(f"{zero_coords} -> {nine_coords}")
+
+            for trail in uphill_trails:
+                edges = zip(trail, trail[1:])
+                trail_map_with_arrows = map_and_edges_to_map_with_arrows(
+                    area_map, edges
+                )
+                trail_map_with_arrows_pretty_string = (
+                    algutils.char_array.char_array_to_pretty_string(
+                        trail_map_with_arrows
+                    )
+                )
+                print()
+                print()
+                cprint(trail_map_with_arrows_pretty_string)
+            print()
+    print()
+
+
+def print_map_with_arrows(
+    area_map: CharArray, edges: EdgeVectors
+) -> None:
+    map_with_arrows = map_and_edges_to_map_with_arrows(area_map, edges)
+
+    map_with_arrows_pretty_string = algutils.char_array.char_array_to_pretty_string(
+        map_with_arrows
+    )
+    cprint("", "map_with_arrows_pretty_string=", map_with_arrows_pretty_string, sep="\n\n")
 
 
 def map_and_edges_to_map_with_arrows(
@@ -38,6 +80,13 @@ def map_and_edges_to_map_with_arrows(
         map_with_arrows[*average(2 * sc, 2 * ec)] = DIRECTION_TO_ARROW_CHAR[tuple(dc)]
 
     return map_with_arrows
+
+
+# Utility functions:
+
+
+def all_coordinates(area_map: CharArray) -> Generator[Vector2D]:
+    return (np.array(tuple_coords) for tuple_coords in np.ndindex(area_map.shape))
 
 
 def detect_edges(area_map: CharArray) -> EdgeVectors:
@@ -62,21 +111,17 @@ def detect_edges(area_map: CharArray) -> EdgeVectors:
             if nh == h + 1:
                 edges.append((c, nc))
 
+    if debug():
+        print_map_with_arrows(area_map, edges)
+    if vvdebug():
+        cprint("", "edges=", edges, sep="\n")
+
     return edges
 
 
 def main() -> None:
     area_map = algutils.char_array.load_char_array(sys.stdin)
     area_map_edges = detect_edges(area_map)
-    if vvdebug():
-        cprint("", "area_map_edges=", area_map_edges, sep="\n")
-
-    map_with_arrows = map_and_edges_to_map_with_arrows(area_map, area_map_edges)
-    if debug():
-        map_with_arrows_pretty_string = algutils.char_array.char_array_to_pretty_string(
-            map_with_arrows
-        )
-        cprint("", "map_with_arrows_pretty_string=", map_with_arrows_pretty_string, sep="\n\n")
 
     directed_graph = algutils.directed_graph.DirectedGraph(
         node_ids=all_coordinates(area_map),
@@ -85,42 +130,22 @@ def main() -> None:
     if vdebug():
         cprint("", "directed_graph=", directed_graph, sep="\n")
 
-    nines_coords = [
-        coords for coords in all_coordinates(area_map) if area_map[*coords] == "9"
-    ]
-    if vdebug():
-        cprint("", "nines_coords=", nines_coords, sep="\n")
-
     zeros_coords = [
         coords for coords in all_coordinates(area_map) if area_map[*coords] == "0"
     ]
     if vdebug():
         cprint("", "zeros_coords=", zeros_coords, sep="\n")
 
+    nines_coords = [
+        coords for coords in all_coordinates(area_map) if area_map[*coords] == "9"
+    ]
+    if vdebug():
+        cprint("", "nines_coords=", nines_coords, sep="\n")
+
     if vvdebug():
-        for zero_coords in zeros_coords:
-            for nine_coords in nines_coords:
-                downhill_trails = directed_graph.find_paths(zero_coords, nine_coords)
-
-                print()
-                print()
-                cprint(f"{zero_coords} -> {nine_coords}")
-
-                for trail in downhill_trails:
-                    edges = zip(trail, trail[1:])
-                    trail_map_with_arrows = map_and_edges_to_map_with_arrows(
-                        area_map, edges
-                    )
-                    trail_map_with_arrows_pretty_string = (
-                        algutils.char_array.char_array_to_pretty_string(
-                            trail_map_with_arrows
-                        )
-                    )
-                    print()
-                    print()
-                    cprint(trail_map_with_arrows_pretty_string)
-                print()
-        print()
+        print_all_uphill_trails(
+            area_map, area_map_edges, zeros_coords, nines_coords, directed_graph
+        )
 
     score_sum = 0
     if vdebug():
