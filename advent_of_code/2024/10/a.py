@@ -8,6 +8,7 @@ import algutils.char_array
 from algutils.char_array import CharArray
 from algutils.color_print import cprint
 import algutils.directed_graph
+from algutils.utils import debug, vdebug, vvdebug
 
 
 Vector2D = NDArray[Shape["1, 2"], Int]
@@ -58,7 +59,7 @@ def detect_edges(area_map: CharArray) -> EdgeVectors:
                 if algutils.char_array.OutOfCharArrayIndexError.matches(e):
                     continue
                 raise
-            if nh == h - 1:
+            if nh == h + 1:
                 edges.append((c, nc))
 
     return edges
@@ -67,64 +68,76 @@ def detect_edges(area_map: CharArray) -> EdgeVectors:
 def main() -> None:
     area_map = algutils.char_array.load_char_array(sys.stdin)
     area_map_edges = detect_edges(area_map)
-    # cprint(area_map_edges)
+    if vvdebug():
+        cprint("", "area_map_edges=", area_map_edges, sep="\n")
 
     map_with_arrows = map_and_edges_to_map_with_arrows(area_map, area_map_edges)
-    map_with_arrows_pretty_string = algutils.char_array.char_array_to_pretty_string(
-        map_with_arrows
-    )
-    print()
-    cprint(map_with_arrows_pretty_string)
+    if debug():
+        map_with_arrows_pretty_string = algutils.char_array.char_array_to_pretty_string(
+            map_with_arrows
+        )
+        cprint("", "map_with_arrows_pretty_string=", map_with_arrows_pretty_string, sep="\n\n")
 
     directed_graph = algutils.directed_graph.DirectedGraph(
         node_ids=all_coordinates(area_map),
         edges_ids=area_map_edges,
     )
-    # print()
-    # cprint(directed_graph)
+    if vdebug():
+        cprint("", "directed_graph=", directed_graph, sep="\n")
 
     nines_coords = [
         coords for coords in all_coordinates(area_map) if area_map[*coords] == "9"
     ]
-    # print()
-    # cprint(nines_coords)
+    if vdebug():
+        cprint("", "nines_coords=", nines_coords, sep="\n")
 
     zeros_coords = [
         coords for coords in all_coordinates(area_map) if area_map[*coords] == "0"
     ]
-    # print()
-    # cprint(zeros_coords)
+    if vdebug():
+        cprint("", "zeros_coords=", zeros_coords, sep="\n")
 
-    # for nine_coords in nines_coords:
-    #     for zero_coords in zeros_coords:
-    #         downhill_trails = directed_graph.find_paths(nine_coords, zero_coords)
+    if vvdebug():
+        for zero_coords in zeros_coords:
+            for nine_coords in nines_coords:
+                downhill_trails = directed_graph.find_paths(zero_coords, nine_coords)
 
-    #         print()
-    #         print()
-    #         cprint(f"{nine_coords} -> {zero_coords}")
+                print()
+                print()
+                cprint(f"{zero_coords} -> {nine_coords}")
 
-    #         for trail in downhill_trails:
-    #             print()
-    #             print()
-    #             edges = zip(trail, trail[1:])
-    #             trail_map_with_arrows = map_and_edges_to_map_with_arrows(
-    #                 area_map, edges
-    #             )
-    #             trail_map_with_arrows_pretty_string = (
-    #                 algutils.char_array.char_array_to_pretty_string(
-    #                     trail_map_with_arrows
-    #                 )
-    #             )
-    #             cprint(trail_map_with_arrows_pretty_string)
-    # print()
+                for trail in downhill_trails:
+                    edges = zip(trail, trail[1:])
+                    trail_map_with_arrows = map_and_edges_to_map_with_arrows(
+                        area_map, edges
+                    )
+                    trail_map_with_arrows_pretty_string = (
+                        algutils.char_array.char_array_to_pretty_string(
+                            trail_map_with_arrows
+                        )
+                    )
+                    print()
+                    print()
+                    cprint(trail_map_with_arrows_pretty_string)
+                print()
+        print()
 
     score_sum = 0
-    for nine_coords in nines_coords:
-        for zero_coords in zeros_coords:
-            path_exists = directed_graph.path_exists(nine_coords, zero_coords)
-            # cprint(f"{nine_coords} -> {zero_coords}: path_exists={path_exists}")
+    if vdebug():
+        print()
+    for zero_coords in zeros_coords:
+        score = 0
+        for nine_coords in nines_coords:
+            path_exists = directed_graph.path_exists(zero_coords, nine_coords)
             if path_exists:
-                score_sum += 1
+                score += 1
+            if vvdebug():
+                cprint(f"{zero_coords} -> {nine_coords}: path_exists={path_exists}")
+        score_sum += score
+        if vdebug():
+            print()
+            cprint(f"{zero_coords}: score={score}")
+            print()
 
     print()
     cprint(f"score_sum={score_sum}")
