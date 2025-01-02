@@ -48,6 +48,9 @@ def detect_edges(area_map: CharArray) -> EdgeVectors:
         c = np.array([y, x])  # Coordinates
         for dc in neighbors:  # Delta coordinates
             nc = c + dc  # Neighbor coordinates
+            ncx, ncy = nc
+            if ncx < 0 or ncy < 0:
+                continue
             h = int(sh)  # Height
             try:
                 nh = int(area_map[*nc])
@@ -64,6 +67,7 @@ def detect_edges(area_map: CharArray) -> EdgeVectors:
 def main() -> None:
     area_map = algutils.char_array.load_char_array(sys.stdin)
     area_map_edges = detect_edges(area_map)
+    # cprint(area_map_edges)
 
     map_with_arrows = map_and_edges_to_map_with_arrows(area_map, area_map_edges)
     map_with_arrows_pretty_string = algutils.char_array.char_array_to_pretty_string(
@@ -123,7 +127,8 @@ def main() -> None:
                 score_sum += 1
 
     print()
-    cprint(score_sum)
+    cprint(f"score_sum={score_sum}")
+    print()
 
 
 if __name__ == "__main__":
