@@ -7,9 +7,9 @@ from algutils.color_print import cprint
 from algutils.utils import debug, vdebug, vvdebug
 
 
-Pebble = PebbleCount = int
+Pebble = int
 Pebbles = list[Pebble]
-PebbleCounts = Counter[Pebble, PebbleCount]
+PebbleCounts = Counter[Pebble]
 
 
 def map_step(pebble: Pebble) -> Pebbles:
