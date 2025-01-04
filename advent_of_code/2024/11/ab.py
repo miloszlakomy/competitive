@@ -56,16 +56,15 @@ def read_input_from_stdin() -> Pebbles:
 )
 def main(number_of_steps: int) -> None:
     pebbles = read_input_from_stdin()
+    result_pebble_counts = mapreduce(pebbles, number_of_steps)
+    result_number_of_pebbles = sum(result_pebble_counts.values())
 
     if debug():
-        cprint(f"pebbles={pebbles}")
-
-    result_pebble_counts = mapreduce(pebbles, number_of_steps)
-
+        cprint(f"number_of_steps={number_of_steps}")
     if vdebug():
+        cprint(f"pebbles={pebbles}")
+    if vvdebug():
         cprint(f"result_pebble_counts={result_pebble_counts}")
-
-    result_number_of_pebbles = sum(result_pebble_counts.values())
 
     cprint(f"result_number_of_pebbles={result_number_of_pebbles}")
 
