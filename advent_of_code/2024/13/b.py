@@ -126,6 +126,7 @@ Unexpected input `
             )
         int_match_groups = (int(coordinate_str) for coordinate_str in match.groups())
         a⃗, b⃗, p⃗ = (vector_2d(vₓ, vᵧ) for vₓ, vᵧ in batched(int_match_groups, n=2))
+        p⃗ += vector_2d(10**13, 10**13)
         machine_behavior = MachineBehavior(a⃗, b⃗, p⃗)
         machines_behavior.append(machine_behavior)
 
