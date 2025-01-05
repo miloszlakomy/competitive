@@ -1,25 +1,25 @@
 ```Bash
-$ PYTHONPATH=~/github.com/miloszlakomy/ time python3 a.py < ab.in
+PYTHONPATH=~/github.com/miloszlakomy/ time python3 a.py < ab.in
 ```
 ```Python
 prizes_cost=32067
         0.51 real         0.43 user         0.07 sys
 ```
 
-<br />
+<br /><br />
 
 ```Bash
-$ PYTHONPATH=~/github.com/miloszlakomy/ time python3 b.py < ab.in
+PYTHONPATH=~/github.com/miloszlakomy/ time python3 b.py < ab.in
 ```
 ```Python
 prizes_cost=92871736253789
         0.48 real         0.41 user         0.07 sys
 ```
 
-<br />
+<br /><br />
 
 ```Bash
-$ DEBUG=vv PYTHONPATH=~/github.com/miloszlakomy/ time python3 a.py < ab_test.in
+DEBUG=vv PYTHONPATH=~/github.com/miloszlakomy/ time python3 a.py < ab_test.in
 ```
 ```Python
 machines_behavior=
@@ -52,10 +52,10 @@ prizes_cost=480
         0.48 real         0.41 user         0.06 sys
 ```
 
-<br />
+<br /><br />
 
 ```Bash
-$ DEBUG=vv PYTHONPATH=~/github.com/miloszlakomy/ time python3 b.py < ab_test.in
+DEBUG=vv PYTHONPATH=~/github.com/miloszlakomy/ time python3 b.py < ab_test.in
 ```
 ```Python
 machines_behavior=
